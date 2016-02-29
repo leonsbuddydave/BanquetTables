@@ -1,0 +1,7 @@
+// Declare Globals here
+// Main launch code
+window.addEventListener('load', function () {
+    // Do some shit here
+});
+
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm1haW4udHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsdUJBQXVCO0FBRXZCLG1CQUFtQjtBQUNuQixNQUFNLENBQUMsZ0JBQWdCLENBQUMsTUFBTSxFQUFFO0lBQzlCLG9CQUFvQjtBQUN0QixDQUFDLENBQUMsQ0FBQyIsImZpbGUiOiJhcHBsaWNhdGlvbi5qcyIsInNvdXJjZXNDb250ZW50IjpbIi8vIERlY2xhcmUgR2xvYmFscyBoZXJlXHJcblxyXG4vLyBNYWluIGxhdW5jaCBjb2RlXHJcbndpbmRvdy5hZGRFdmVudExpc3RlbmVyKCdsb2FkJywgZnVuY3Rpb24oKSB7XHJcblx0XHQvLyBEbyBzb21lIHNoaXQgaGVyZVxyXG59KTsiXSwic291cmNlUm9vdCI6Ii9zb3VyY2UvIn0=

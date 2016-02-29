@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "module": "amd",
+        "outFile": "application.js"
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}

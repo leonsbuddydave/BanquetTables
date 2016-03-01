@@ -1,14 +1,20 @@
 var gulp = require('gulp');
+var KarmaServer = require('karma').Server;
 var plugins = require('gulp-load-plugins')({debug: true, lazy: false});
 var rimraf = require('rimraf');
 var tsProject = plugins.typescript.createProject('tsconfig.json', { sortOutput: true });
 var Config = require('./gulpfile.config');
 var browserSync = require('browser-sync');
+var runSequence = require('run-sequence');
 
 var reload = browserSync.reload;
 var config = new Config();
 
-gulp.task('dist', ['clean', 'scripts', 'templates', 'styles'], function() {
+gulp.task('build', function(done) {
+	runSequence('clean', ['scripts', 'templates', 'styles', 'test-scripts'], done);
+});
+
+gulp.task('dist', ['build'], function() {
 	return gulp.src('.tmp/**/*').pipe(gulp.dest('dist'));
 });
 
@@ -16,7 +22,7 @@ gulp.task('clean', function(cb) {
 	rimraf('{dist,bin,.tmp}', cb);
 });
 
-gulp.task('scripts', ['clean'], function() {
+gulp.task('scripts', function() {
 	return gulp
 		.src(config.allTypeScript)
 		.pipe(plugins.sourcemaps.init())
@@ -26,7 +32,16 @@ gulp.task('scripts', ['clean'], function() {
 		.pipe(gulp.dest('.tmp/scripts'));
 });
 
-gulp.task('styles', ['clean'], function() {
+gulp.task('test-scripts', ['scripts'], function() {
+	return gulp
+		.src(["test/**/*.spec.ts", "typings/tsd.d.ts"])
+		.pipe(plugins.sourcemaps.init())
+		.pipe(plugins.typescript())
+		.pipe(plugins.sourcemaps.write())
+		.pipe(gulp.dest('.tmp/test'));
+});
+
+gulp.task('styles', function() {
 	return gulp.src('src/styles/**/*.scss')
 	    .pipe(plugins.plumber())
 	    .pipe(plugins.sourcemaps.init())
@@ -42,12 +57,29 @@ gulp.task('styles', ['clean'], function() {
       .pipe(reload({stream: true}));
 });
 
-gulp.task('templates', ['clean'], function() {
+gulp.task('templates', function() {
 	return gulp.src('src/**/*.html')
 		.pipe(gulp.dest('.tmp'))
 });
 
-gulp.task('serve', ['clean', 'scripts', 'templates', 'styles'], function() {
+gulp.task('tdd', ['build'], function(done) {
+	var server = new KarmaServer({
+		configFile: __dirname + '/karma.conf.js'
+	}, done);
+
+	server.start();	
+
+	var refreshFiles = function() {
+		server.refreshFiles().then(function() {
+			console.log(arguments);
+		});
+	}
+
+	gulp.watch('test/**/*.spec.ts', ['test-scripts'], refreshFiles);
+	gulp.watch('src/**/*.ts', ['scripts'], refreshFiles);
+});
+
+gulp.task('serve', ['build'], function() {
 	browserSync.init({
 		port: 9000,
 		server: {

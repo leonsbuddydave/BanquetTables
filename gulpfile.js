@@ -32,6 +32,13 @@ gulp.task('scripts', function() {
 		.pipe(gulp.dest('.tmp/scripts'));
 });
 
+gulp.task('tslint', function() {
+	return gulp
+		.src(config.allTypeScript)
+		.pipe(plugins.tslint())
+		.pipe(plugins.tslint.report("verbose"));
+});
+
 gulp.task('test-scripts', ['scripts'], function() {
 	return gulp
 		.src(["test/**/*.spec.ts", "typings/tsd.d.ts"])
